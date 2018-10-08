@@ -48,7 +48,7 @@ func (cg *CoinGecko) Rate(token, currency string, timestamp time.Time) (float64,
 	}
 	req.Header.Add("Accept", "application/json")
 	q := req.URL.Query()
-	q.Add("date", timestamp.Format(timeLayout))
+	q.Add("date", timestamp.UTC().Format(timeLayout))
 	req.URL.RawQuery = q.Encode()
 	rsp, err := cg.client.Do(req)
 	if err != nil {
