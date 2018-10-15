@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+const cgName = "coingecko"
+
 func TestCoinGecko(t *testing.T) {
 	cg := New()
 	rate, err := cg.Rate("bitcoin", "usd", time.Now())
@@ -18,4 +20,8 @@ func TestCoinGecko(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Logf("current ETH/USD rate: %f", rate)
+
+	if name := cg.Name(); name != cgName {
+		t.Fatal(err)
+	}
 }
