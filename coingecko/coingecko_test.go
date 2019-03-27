@@ -21,6 +21,12 @@ func TestCoinGecko(t *testing.T) {
 	}
 	t.Logf("current ETH/USD rate: %f", rate)
 
+	rate, err = cg.USDRate(time.Now().AddDate(0, 0, -7))
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("last week ETH/USD rate: %f", rate)
+
 	if name := cg.Name(); name != cgName {
 		t.Fatal(err)
 	}
