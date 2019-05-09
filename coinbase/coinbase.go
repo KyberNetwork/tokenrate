@@ -3,7 +3,6 @@ package coinbase
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -50,8 +49,6 @@ func (cb *CoinBase) Rate(token, currency string, timestamp time.Time) (float64, 
 	var url string
 	currentDate := time.Now().UTC().Format(timeLayout)
 	queryDate := timestamp.UTC().Format(timeLayout)
-
-	log.Println(currentDate, queryDate)
 
 	if currentDate == queryDate {
 		url = fmt.Sprintf(currentEndpoint, cb.baseURL, token, currency)
