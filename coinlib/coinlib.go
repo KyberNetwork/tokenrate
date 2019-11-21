@@ -13,6 +13,7 @@ import (
 	"github.com/KyberNetwork/tokenrate/common"
 )
 
+// CoinLib data source only support
 type CoinLib struct {
 	c               *http.Client
 	key             string
@@ -30,6 +31,7 @@ type priceResponse struct {
 	// there's other fields but we dont interested in them.
 }
 
+// USDRate ..
 func (c CoinLib) USDRate(timestamp time.Time) (float64, error) {
 	today := common.TimeOfTodayStart()
 	if timestamp != today {
@@ -68,10 +70,12 @@ func (c CoinLib) USDRate(timestamp time.Time) (float64, error) {
 	return pr.Price, nil
 }
 
+// Name ...
 func (c CoinLib) Name() string {
 	return common.CoinLib
 }
 
+// New make new coinlib client
 func New(key string) *CoinLib {
 	return &CoinLib{
 		c:               &http.Client{},

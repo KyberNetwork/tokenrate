@@ -12,11 +12,13 @@ import (
 	"github.com/KyberNetwork/tokenrate/common"
 )
 
+// Client ...
 type Client struct {
 	c       *http.Client
 	baseURL string
 }
 
+// New ...
 func New(c *http.Client, baseURL string) *Client {
 	return &Client{
 		c:       c,
@@ -50,6 +52,7 @@ func (c *Client) USDRate(timestamp time.Time) (float64, error) {
 	return rateResp.Price, nil
 }
 
+// Name ...
 func (c *Client) Name() string {
 	return "usdrate-api"
 }

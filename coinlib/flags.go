@@ -8,7 +8,7 @@ const (
 	keyFlag = "coinlib-key"
 )
 
-// NewFlags return cli config for coingecko
+// NewFlags return cli config for coinlib
 func NewFlags() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
@@ -20,7 +20,7 @@ func NewFlags() []cli.Flag {
 	}
 }
 
-// NewCoinGeckoFromContext return coingecko provider
+// NewCoinLibFromContext return coinlib provider
 func NewCoinLibFromContext(c *cli.Context) *CoinLib {
 	return New(c.String(keyFlag))
 }

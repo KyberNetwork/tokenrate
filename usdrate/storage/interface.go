@@ -12,7 +12,9 @@ import (
 
 // Storage storage interface
 type Storage interface {
+	// SaveTokenPrice ...
 	SaveTokenPrice(token, currency, provider string, timestamp time.Time, price float64) error
+	// GetTokenPrice ...
 	GetTokenPrice(token, currency, provider string, timestamp time.Time) (float64, error)
 }
 

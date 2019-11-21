@@ -9,7 +9,8 @@ const (
 const (
 	// Coingecko coingecko provider
 	Coingecko = "coingecko"
-	CoinLib   = "coinlib"
+	// CoinLib provider
+	CoinLib = "coinlib"
 )
 
 // PriceResponse ...
