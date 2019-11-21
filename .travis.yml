@@ -19,6 +19,11 @@ env:
 install:
   - curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b ${TRAVIS_HOME}/bin v${GOLANGCI_LINT_VERSION}
 
+before_script:
+  - psql -c "CREATE DATABASE tokenrate;" -U postgres
+  - psql -c "CREATE USER tokenrate WITH PASSWORD 'tokenrate';" -U postgres
+  - psql -c "ALTER ROLE tokenrate SUPERUSER;" -U postgres
+
 script:
   - golangci-lint run --config .golangci.yml ./...
   - go test -v -race ./...
