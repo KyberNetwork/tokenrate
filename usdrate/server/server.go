@@ -20,16 +20,20 @@ type Server struct {
 	host      string
 	sugar     *zap.SugaredLogger
 	providers []tokenrate.ETHUSDRateProvider
+	r         *gin.Engine
 }
 
 // NewServer return server instance
 func NewServer(sugar *zap.SugaredLogger, host string, storage storage.Storage, providers []tokenrate.ETHUSDRateProvider) *Server {
-	return &Server{
+	s := &Server{
 		storage:   storage,
 		host:      host,
 		sugar:     sugar,
 		providers: providers,
 	}
+	r := s.setupRouter()
+	s.r = r
+	return s
 }
 
 type queryPrice struct {
@@ -120,6 +124,5 @@ func (s *Server) setupRouter() *gin.Engine {
 
 // Start running http server to serve trade logs data
 func (s *Server) Start() error {
-	r := s.setupRouter()
-	return r.Run(s.host)
+	return s.r.Run(s.host)
 }
