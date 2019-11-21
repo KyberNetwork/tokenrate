@@ -15,7 +15,6 @@ func NewFlags() []cli.Flag {
 			Name:   keyFlag,
 			Usage:  "CoinLib API Key",
 			EnvVar: "COINLIB_KEY",
-			Value:  "coinlib-key",
 		},
 	}
 }

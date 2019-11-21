@@ -2,25 +2,43 @@ package server
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
 	"net/http"
 	"net/http/httptest"
-	"reflect"
 	"testing"
 	"time"
 
-	"bou.ke/monkey"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap"
 
 	"github.com/KyberNetwork/tokenrate"
-	"github.com/KyberNetwork/tokenrate/coingecko"
-	"github.com/KyberNetwork/tokenrate/coinlib"
 	"github.com/KyberNetwork/tokenrate/common"
 	"github.com/KyberNetwork/tokenrate/pkg/testutil"
 	"github.com/KyberNetwork/tokenrate/usdrate/storage/postgres"
 )
+
+type notAvailableRate struct {
+}
+
+func (n notAvailableRate) USDRate(time.Time) (float64, error) {
+	return 0, errors.New("not available")
+}
+
+func (n notAvailableRate) Name() string {
+	return "N/A"
+}
+
+type fixedRate struct {
+}
+
+func (f fixedRate) USDRate(time.Time) (float64, error) {
+	return 100.0, nil
+}
+
+func (f fixedRate) Name() string {
+	return "fixedRate"
+}
 
 func TestClient(t *testing.T) {
 	db, teardown := testutil.MustNewDevelopmentDB()
@@ -32,17 +50,7 @@ func TestClient(t *testing.T) {
 	require.NoError(t, err)
 
 	z := zap.S()
-	cl := coinlib.New("key")
-	cg := coingecko.New()
-
-	monkey.PatchInstanceMethod(reflect.TypeOf(cg), "USDRate", func(_ *coingecko.CoinGecko, _ time.Time) (float64, error) {
-		return 0, fmt.Errorf("no USDRate allowed")
-	})
-	monkey.PatchInstanceMethod(reflect.TypeOf(cl), "USDRate", func(_ *coinlib.CoinLib, _ time.Time) (float64, error) {
-		return 100.0, nil
-	})
-
-	s := NewServer(z, "localhost:8080", trdb, []tokenrate.ETHUSDRateProvider{cg, cl})
+	s := NewServer(z, "localhost:8080", trdb, []tokenrate.ETHUSDRateProvider{notAvailableRate{}, fixedRate{}})
 	req, err := http.NewRequest(http.MethodGet, "/price/eth-usd", nil)
 	assert.NoError(t, err)
 	resp := httptest.NewRecorder()

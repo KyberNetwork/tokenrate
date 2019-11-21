@@ -3,7 +3,6 @@ module github.com/KyberNetwork/tokenrate
 go 1.12
 
 require (
-	bou.ke/monkey v1.0.1
 	github.com/TheZeroSlave/zapsentry v1.3.0
 	github.com/carlescere/scheduler v0.0.0-20170109141437-ee74d2f83d82
 	github.com/getsentry/sentry-go v0.3.1
