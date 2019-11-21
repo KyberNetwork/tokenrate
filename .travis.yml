@@ -1,7 +1,7 @@
 language: go
 
 go:
-  - 1.11.x
+  - 1.12.x
 
 services:
   - docker
@@ -12,7 +12,7 @@ addons:
 
 env:
   global:
-    - GOLANGCI_LINT_VERSION=1.15.0
+    - GOLANGCI_LINT_VERSION=1.20.1
     - GO111MODULE=on
     - GOFLAGS=
 
