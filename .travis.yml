@@ -3,17 +3,17 @@ language: go
 go:
   - 1.11.x
 
-install:
-  - export GOMETALINTER_VERSION=2.0.11
-  - ./.travis/gometalinter-install.sh
-  - export PATH=$PATH:${TRAVIS_HOME}/gometalinter/gometalinter-${GOMETALINTER_VERSION}-linux-amd64
-  - export GO111MODULE=on
+services:
+  - docker
+  - postgresql
 
-cache:
-  directories:
-  - ${TRAVIS_HOME}/gometalinter/gometalinter-${GOMETALINTER_VERSION}-linux-amd64
+addons:
+  postgresql: "9.5"
+
+
+install:
+  - curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b ${TRAVIS_HOME}/bin v${GOLANGCI_LINT_VERSION}
 
 script:
-  - gometalinter --config=gometalinter.json ./...
-  - go build -v ./...
-  - go test -v ./...
+  - golangci-lint run --config .golangci.yml ./...
+  - go test -v -race ./...

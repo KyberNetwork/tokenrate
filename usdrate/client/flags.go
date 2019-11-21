@@ -22,7 +22,7 @@ func NewFlags() []cli.Flag {
 	}
 }
 
-// NewCoinGeckoFromContext return coingecko provider
+// NewFromContext return usdrate client
 func NewFromContext(c *cli.Context) *Client {
 	return New(&http.Client{}, c.String(apiURLFlag))
 }
