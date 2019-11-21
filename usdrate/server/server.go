@@ -11,6 +11,7 @@ import (
 	"github.com/KyberNetwork/tokenrate"
 	"github.com/KyberNetwork/tokenrate/common"
 	"github.com/KyberNetwork/tokenrate/usdrate/storage"
+	"github.com/KyberNetwork/tokenrate/usdrate/storage/postgres"
 )
 
 // Server serve token price via http endpoint
@@ -63,9 +64,23 @@ func (s *Server) receiveETHUSDPrice(date string) (float64, error) {
 	if queryDate == ts { // query for today price
 		return s.currentPrice(queryDate)
 	}
+
 	s.sugar.Infow("query price from DB", "date", date)
-	// query historical data, fetch it from DB
-	return s.storage.GetTokenPrice(common.ETHID, common.USDID, common.Coingecko, queryDate)
+	// query historical data, fetch it from DB, fallover to provider if DB say not found
+	v, err := s.storage.GetTokenPrice(common.ETHID, common.USDID, common.Coingecko, queryDate)
+	if err == postgres.ErrNotFound && len(s.providers) > 0 {
+		s.sugar.Warnw("DB return not found, fallback to request to provider", "date", queryDate)
+		for _, p := range s.providers {
+			if v, err = p.USDRate(queryDate); err == nil {
+				// store it so we dont have to query to provider later.
+				if err = s.storage.SaveTokenPrice(common.ETHID, common.USDID, p.Name(), queryDate, v); err != nil {
+					s.sugar.Warnw("store rate failed", "err", err)
+				}
+				return v, nil
+			}
+		}
+	}
+	return v, err
 }
 
 func (s *Server) getETHUSDPrice(c *gin.Context) {
