@@ -4,7 +4,6 @@ import (
 	"testing"
 	"time"
 
-	_ "github.com/lib/pq" // sql driver name: "postgres"
 	"github.com/stretchr/testify/require"
 
 	"github.com/KyberNetwork/tokenrate/pkg/testutil"

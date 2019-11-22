@@ -61,7 +61,6 @@ func main() {
 		},
 	)
 	defaultPGDB := "tokenrate"
-	a.Flags = append(a.Flags, coingecko.NewFlags()...)
 	a.Flags = append(a.Flags, app.NewPostgreSQLFlags(defaultPGDB)...)
 	a.Flags = append(a.Flags, app.NewSentryFlags()...)
 	if err := a.Run(os.Args); err != nil {
@@ -73,8 +72,7 @@ func validateTime(fromTimeS, toTimeS string) (time.Time, time.Time, error) {
 	var (
 		fromTime, toTime time.Time
 		err              error
-		now              = time.Now()
-		currentTime      = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.UTC)
+		currentTime      = common.TimeOfTodayStart()
 	)
 	if len(fromTimeS) != 0 {
 		fromTime, err = common.DateStringToTime(fromTimeS)
@@ -167,7 +165,7 @@ func run(c *cli.Context) error {
 		return err
 	}
 	if err := crawlTokenPriceDaily(sugar, ps, s, c.String(jobRunningTimeFlag)); err != nil {
-		logger.Errorw("failed to get rate daily", "error", err)
+		logger.Panicw("failed to get rate daily", "error", err)
 	}
 	cs := make(chan os.Signal, 1)
 	signal.Notify(cs, os.Interrupt)

@@ -18,6 +18,5 @@ func TimeToDateString(t time.Time) string {
 
 // TimeOfTodayStart return time of today start in UTC.
 func TimeOfTodayStart() time.Time {
-	t := time.Now().UTC()
-	return time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, time.UTC)
+	return time.Now().Truncate(time.Hour * 24).UTC()
 }
