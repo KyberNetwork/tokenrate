@@ -28,3 +28,13 @@ script:
   - golangci-lint run --config .golangci.yml ./...
   - go test -v -race ./...
   - go build -v ./...
+
+after_success:
+  - docker --version
+  - docker build -f Dockerfile --label "commit=$TRAVIS_COMMIT" -t kybernetwork/tokenrate:$TRAVIS_COMMIT .
+
+deploy:
+  - provider: script
+    script: bash .travis/docker_push.sh
+    on:
+      all_branches: true
