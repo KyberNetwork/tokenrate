@@ -1,4 +1,4 @@
-FROM golang:1.12-stretch AS build-env
+FROM golang:1.14-stretch AS build-env
 
 ENV GO111MODULE=on
 COPY . /tokenrate
