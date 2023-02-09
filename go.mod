@@ -6,7 +6,7 @@ require (
 	github.com/TheZeroSlave/zapsentry v1.3.0
 	github.com/carlescere/scheduler v0.0.0-20170109141437-ee74d2f83d82
 	github.com/getsentry/sentry-go v0.3.1
-	github.com/gin-gonic/gin v1.4.0
+	github.com/gin-gonic/gin v1.7.7
 	github.com/go-sql-driver/mysql v1.4.0 // indirect
 	github.com/jmoiron/sqlx v0.0.0-20180614180643-0dae4fefe7c0
 	github.com/lib/pq v1.2.0
